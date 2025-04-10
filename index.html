@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>煤炉收益计算器</title>
+  <title>收益计算器</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,7 @@
       border-radius: 12px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
       width: 85%;
-      max-width: 500px;
+      max-width: 550px; /* 略微增加宽度 */
     }
 
     h1 {
@@ -103,7 +103,8 @@
 
     .shipping-options {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between; /* 均匀分布 */
+        margin-bottom: 10px;
     }
 
     .shipping-button {
@@ -113,10 +114,11 @@
       cursor: pointer;
       background-color: #e9ecef;
       color: #495057;
-      margin-bottom: 5px;
-      text-align: left;
-      font-size: 14px; 
+      width: 23%; /* 四个按钮，预留间距 */
+      text-align: center;
+      font-size: 14px;
       transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      box-sizing: border-box; /* 确保padding和border不增加宽度 */
     }
 
     .shipping-button:hover {
@@ -124,6 +126,35 @@
     }
 
     .shipping-button.active {
+      background-color: #4263eb;
+      color: #fff;
+    }
+
+     .profit-margin-options {
+        display: flex;
+        justify-content: space-between; /* 均匀分布 */
+        margin-top: 10px;
+    }
+
+    .profit-button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #e9ecef;
+      color: #495057;
+      width: 30%; /* 三个按钮，预留间距 */
+      text-align: center;
+      font-size: 14px;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      box-sizing: border-box; /* 确保padding和border不增加宽度 */
+    }
+
+     .profit-button:hover {
+        background-color: #dde2e6;
+    }
+
+    .profit-button.active {
       background-color: #4263eb;
       color: #fff;
     }
@@ -165,7 +196,7 @@
           <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">日元 (円)</button>
       </div>
       <div class="input-group">
-        <input type="number" id="purchasePrice" name="purchasePrice" required oninput="displayExchangeRate();calculate()">
+        <input type="number" id="purchasePrice" name="purchasePrice" required value="0" onfocus="this.value=''" oninput="displayExchangeRate();calculate()">
         <div class="input-unit" id="purchasePriceUnit">元</div>
       </div>
        <div class="exchange-rate-info" id="exchangeRateInfo"></div>
@@ -173,18 +204,29 @@
     <div class="form-group">
       <label for="sellingPrice">出品价格:</label>
       <div class="input-group">
-        <input type="number" id="sellingPrice" name="sellingPrice" required oninput="calculate()">
+        <input type="number" id="sellingPrice" name="sellingPrice" required value="300" onfocus="this.value=''" oninput="calculate()">
         <div class="input-unit">円</div>
       </div>
     </div>
     <div class="form-group">
       <label>发货方式:</label>
       <div class="shipping-options">
-        <button class="shipping-button" id="miniButton" onclick="setShipping('mini')">ゆうパケットポストmini(180円)</button>
-        <button class="shipping-button" id="plusButton" onclick="setShipping('plus')">ゆうパケットポストプラス(520円)</button>
+        <button class="shipping-button" id="miniButton" onclick="setShipping('mini')">mini(180円)</button>
+        <button class="shipping-button" id="postButton" onclick="setShipping('post')">ポスト(220円)</button>
+        <button class="shipping-button" id="plusButton" onclick="setShipping('plus')">plus(520円)</button>
         <button class="shipping-button" id="expressButton" onclick="setShipping('express')">宅配便(730円)</button>
       </div>
     </div>
+
+    <div class="form-group">
+      <label>目标利润率:</label>
+      <div class="profit-margin-options">
+        <button class="profit-button" id="profit30" onclick="calculateSellingPrice(30)">30%</button>
+        <button class="profit-button" id="profit60" onclick="calculateSellingPrice(60)">60%</button>
+        <button class="profit-button" id="profit100" onclick="calculateSellingPrice(100)">100%</button>
+      </div>
+    </div>
+
     <div class="result" id="result" style="display:none;">
       <p>收益: <span id="profitJPY"></span>円 <span id="profitCNY"></span></p>
       <p>利润率: <span id="profitMargin"></span>%</p>
@@ -239,6 +281,7 @@
       selectedShipping = shippingMethod;
 
       document.getElementById('miniButton').classList.remove('active');
+      document.getElementById('postButton').classList.remove('active');
       document.getElementById('plusButton').classList.remove('active');
       document.getElementById('expressButton').classList.remove('active');
 
@@ -270,6 +313,9 @@
         case "mini":
           shippingCost = 180;
           break;
+          case "post":
+              shippingCost = 220;
+              break;
         case "plus":
           shippingCost = 520;
           break;
@@ -298,6 +344,37 @@
 
 
       document.getElementById("result").style.display = "block";
+    }
+
+    function calculateSellingPrice(targetProfitMargin) {
+      const purchasePriceInput = parseFloat(document.getElementById("purchasePrice").value);
+      let shippingCost = 0;
+
+        let purchasePrice = purchasePriceInput;
+        if (currentCurrency === 'CNY') {
+            purchasePrice = purchasePriceInput * exchangeRate;
+        }
+
+      switch (selectedShipping) {
+        case "mini":
+          shippingCost = 180;
+          break;
+          case "post":
+              shippingCost = 220;
+              break;
+        case "plus":
+          shippingCost = 520;
+          break;
+        case "express":
+          shippingCost = 730;
+          break;
+        default:
+          return;
+      }
+
+      const sellingPrice = (purchasePrice + shippingCost) / (0.9 - (0.9 * targetProfitMargin / 100));
+      document.getElementById("sellingPrice").value = sellingPrice.toFixed(0);
+      calculate();
     }
 
     fetchExchangeRate();
