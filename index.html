@@ -6,10 +6,10 @@
   <title>收益计算器</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f8f8f8;
+      background-color: #f5f9ff; /* 浅蓝色背景 */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,63 +17,134 @@
     }
 
     .container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 80%;
-      max-width: 400px;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); /* 更柔和的阴影 */
+      width: 85%;
+      max-width: 500px;
     }
 
     h1 {
       text-align: center;
-      color: #333;
-      margin-bottom: 20px;
+      color: #4263eb; /* 主题蓝色 */
+      margin-bottom: 25px;
+      font-weight: 600;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin-bottom: 5px;
-      color: #555;
+      margin-bottom: 8px;
+      color: #343a40; /* 稍微深色的文字 */
+      font-weight: 500;
     }
 
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    .input-group {
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="number"] {
+      width: 70%;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
       box-sizing: border-box;
       margin-bottom: 10px;
+      font-size: 16px;
+      transition: border-color 0.2s ease-in-out;
     }
 
-    .currency-selector {
-      margin-bottom: 5px;
-      text-align: right;
+    input[type="number"]:focus {
+      border-color: #4263eb; /* 主题蓝色 */
+      outline: none;
+    }
+
+    .input-unit {
+      width: 30%;
+      padding: 12px;
+      text-align: center;
+      color: #868e96;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .currency-options {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 15px;
     }
 
     .currency-button {
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      background-color: #eee;
+      background-color: #e9ecef;
+      color: #495057;
+      width: 45%;
+      text-align: center;
+      font-size: 16px;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .currency-button:hover {
+        background-color: #dde2e6;
     }
 
     .currency-button.active {
-      background-color: #ddd;
+      background-color: #4263eb;
+      color: #fff;
+    }
+
+    .shipping-options {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .shipping-button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #e9ecef;
+      color: #495057;
+      margin-bottom: 8px;
+      text-align: left;
+      font-size: 16px;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .shipping-button:hover {
+        background-color: #dde2e6;
+    }
+
+    .shipping-button.active {
+      background-color: #4263eb;
+      color: #fff;
     }
 
     .result {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: #f0f0f0;
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      text-align: center;
+    }
+
+    .result p {
+      margin-bottom: 8px;
+      color: #495057;
+      font-size: 18px;
+    }
+
+    .result span {
+      font-weight: 600;
+      color: #4263eb;
     }
   </style>
 </head>
@@ -81,24 +152,30 @@
   <div class="container">
     <h1>收益计算器</h1>
     <div class="form-group">
-       <div class="currency-selector">
-        <button class="currency-button active" id="cnyButton" onclick="setCurrency('CNY')">CNY</button>
-        <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">JPY</button>
-      </div>
       <label for="purchasePrice">购入价格:</label>
-      <input type="number" id="purchasePrice" name="purchasePrice" required oninput="calculate()">
+      <div class="currency-options">
+          <button class="currency-button active" id="cnyButton" onclick="setCurrency('CNY')">人民币 (CNY)</button>
+          <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">日元 (JPY)</button>
+      </div>
+      <div class="input-group">
+        <input type="number" id="purchasePrice" name="purchasePrice" required oninput="calculate()">
+        <div class="input-unit" id="purchasePriceUnit">CNY</div>
+      </div>
     </div>
     <div class="form-group">
       <label for="sellingPrice">出品价格:</label>
-      <input type="number" id="sellingPrice" name="sellingPrice" required oninput="calculate()">
+      <div class="input-group">
+        <input type="number" id="sellingPrice" name="sellingPrice" required oninput="calculate()">
+        <div class="input-unit">円</div>
+      </div>
     </div>
     <div class="form-group">
-      <label for="shippingMethod">发货方式:</label>
-      <select id="shippingMethod" name="shippingMethod" onchange="calculate()">
-        <option value="mini">ゆうパケットポストmini(180円)</option>
-        <option value="plus">ゆうパケットポストプラス(520円)</option>
-        <option value="express">宅配便(730円)</option>
-      </select>
+      <label>发货方式:</label>
+      <div class="shipping-options">
+        <button class="shipping-button" id="miniButton" onclick="setShipping('mini')">ゆうパケットポストmini(180円)</button>
+        <button class="shipping-button" id="plusButton" onclick="setShipping('plus')">ゆうパケットポストプラス(520円)</button>
+        <button class="shipping-button" id="expressButton" onclick="setShipping('express')">宅配便(730円)</button>
+      </div>
     </div>
     <div class="result" id="result" style="display:none;">
       <p>收益: <span id="profit"></span>円</p>
@@ -109,6 +186,7 @@
   <script>
     let currentCurrency = 'CNY';
     let exchangeRate = 1;
+    let selectedShipping = '';
 
     async function fetchExchangeRate() {
       try {
@@ -117,7 +195,7 @@
         exchangeRate = data.rates.JPY;
       } catch (error) {
         console.error('获取汇率失败:', error);
-        exchangeRate = 14.68; // 设置一个默认值
+        exchangeRate = 14.68;
       }
       calculate();
     }
@@ -129,29 +207,42 @@
 
       if (currency === 'CNY') {
         document.getElementById('cnyButton').classList.add('active');
+        document.getElementById('purchasePriceUnit').textContent = 'CNY';
         fetchExchangeRate();
       } else {
         document.getElementById('jpyButton').classList.add('active');
+        document.getElementById('purchasePriceUnit').textContent = '円';
         exchangeRate = 1;
         calculate();
       }
     }
 
+    function setShipping(shippingMethod) {
+      selectedShipping = shippingMethod;
+
+      document.getElementById('miniButton').classList.remove('active');
+      document.getElementById('plusButton').classList.remove('active');
+      document.getElementById('expressButton').classList.remove('active');
+
+      document.getElementById(shippingMethod + 'Button').classList.add('active');
+      calculate();
+    }
+
     function calculate() {
       let purchasePrice = parseFloat(document.getElementById("purchasePrice").value);
       const sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-      const shippingMethod = document.getElementById("shippingMethod").value;
       let shippingCost = 0;
 
       if (isNaN(purchasePrice) || isNaN(sellingPrice)) {
         document.getElementById("result").style.display = "none";
         return;
       }
+
       if (currentCurrency === 'CNY') {
            purchasePrice = purchasePrice * exchangeRate;
       }
 
-      switch (shippingMethod) {
+      switch (selectedShipping) {
         case "mini":
           shippingCost = 180;
           break;
@@ -162,7 +253,8 @@
           shippingCost = 730;
           break;
         default:
-          shippingCost = 0;
+          document.getElementById("result").style.display = "none";
+          return;
       }
 
       const revenue = sellingPrice * 0.9 - shippingCost;
