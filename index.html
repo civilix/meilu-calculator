@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>收益计算器</title>
+  <title>煤炉收益计算器</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -107,15 +107,15 @@
     }
 
     .shipping-button {
-      padding: 12px 20px;
+      padding: 8px 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       background-color: #e9ecef;
       color: #495057;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       text-align: left;
-      font-size: 16px;
+      font-size: 14px; 
       transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     }
 
@@ -151,6 +151,7 @@
         font-size: 12px;
         color: #868e96;
         text-align: right;
+        margin-bottom:5px;
     }
   </style>
 </head>
@@ -164,7 +165,7 @@
           <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">日元 (円)</button>
       </div>
       <div class="input-group">
-        <input type="number" id="purchasePrice" name="purchasePrice" required oninput="calculate()">
+        <input type="number" id="purchasePrice" name="purchasePrice" required oninput="displayExchangeRate();calculate()">
         <div class="input-unit" id="purchasePriceUnit">元</div>
       </div>
        <div class="exchange-rate-info" id="exchangeRateInfo"></div>
@@ -185,7 +186,7 @@
       </div>
     </div>
     <div class="result" id="result" style="display:none;">
-      <p>收益: <span id="profit"></span>円</p>
+      <p>收益: <span id="profitJPY"></span>円 <span id="profitCNY"></span></p>
       <p>利润率: <span id="profitMargin"></span>%</p>
     </div>
   </div>
@@ -284,8 +285,18 @@
       const profit = revenue - convertedPurchasePrice;
       const profitMargin = (profit / sellingPrice) * 100;
 
-      document.getElementById("profit").textContent = profit.toFixed(0);
       document.getElementById("profitMargin").textContent = profitMargin.toFixed(0);
+
+      if (currentCurrency === 'CNY') {
+            const profitCNY = profit / exchangeRate;
+            document.getElementById("profitJPY").textContent = profit.toFixed(0);
+            document.getElementById("profitCNY").textContent = `≈ ${profitCNY.toFixed(0)}元`;
+       } else {
+           document.getElementById("profitJPY").textContent = profit.toFixed(0);
+           document.getElementById("profitCNY").textContent = ``;
+       }
+
+
       document.getElementById("result").style.display = "block";
     }
 
