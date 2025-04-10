@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收益计算器</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 400px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #3e8e41;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>收益计算器</h1>
+    <div class="form-group">
+      <label for="purchasePrice">购入价格:</label>
+      <input type="number" id="purchasePrice" name="purchasePrice" required>
+    </div>
+    <div class="form-group">
+      <label for="sellingPrice">出品价格:</label>
+      <input type="number" id="sellingPrice" name="sellingPrice" required>
+    </div>
+    <div class="form-group">
+      <label for="shippingMethod">发货方式:</label>
+      <select id="shippingMethod" name="shippingMethod">
+        <option value="mini">Mini</option>
+        <option value="plus">Plus</option>
+        <option value="express">快递</option>
+      </select>
+    </div>
+    <button onclick="calculate()">计算</button>
+    <div class="result" id="result" style="display:none;">
+      <p>收益: <span id="profit"></span></p>
+      <p>利润率: <span id="profitMargin"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      const purchasePrice = parseFloat(document.getElementById("purchasePrice").value);
+      const sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
+      const shippingMethod = document.getElementById("shippingMethod").value;
+      let shippingCost = 0;
+
+      switch (shippingMethod) {
+        case "mini":
+          shippingCost = 180;
+          break;
+        case "plus":
+          shippingCost = 520;
+          break;
+        case "express":
+          shippingCost = 750;
+          break;
+        default:
+          shippingCost = 0;
+      }
+
+      const revenue = sellingPrice * 0.9 - shippingCost;
+      const profit = revenue - purchasePrice;
+      const profitMargin = (profit / purchasePrice) * 100;
+
+      document.getElementById("profit").textContent = profit.toFixed(2);
+      document.getElementById("profitMargin").textContent = profitMargin.toFixed(2) + "%";
+      document.getElementById("result").style.display = "block";
+    }
+  </script>
+</body>
+</html>
