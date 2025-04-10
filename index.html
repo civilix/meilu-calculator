@@ -4,187 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>收益计算器</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f9ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-      width: 85%;
-      max-width: 550px; 
-    }
-
-    h1 {
-      text-align: center;
-      color: #4263eb;
-      margin-bottom: 25px;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #343a40;
-      font-weight: 500;
-    }
-
-    .input-group {
-      display: flex;
-      align-items: center;
-    }
-
-    input[type="number"] {
-      width: 70%;
-      padding: 12px;
-      border: 1px solid #ced4da;
-      border-radius: 8px;
-      box-sizing: border-box;
-      margin-bottom: 5px;
-      font-size: 16px;
-      transition: border-color 0.2s ease-in-out;
-    }
-
-    input[type="number"]:focus {
-      border-color: #4263eb;
-      outline: none;
-    }
-
-    .input-unit {
-      width: 30%;
-      padding: 12px;
-      text-align: center;
-      color: #868e96;
-      margin-bottom: 5px;
-      font-size: 16px;
-    }
-
-    .currency-options {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 15px;
-    }
-
-    .currency-button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #e9ecef;
-      color: #495057;
-      width: 45%;
-      text-align: center;
-      font-size: 16px;
-      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-    }
-
-    .currency-button:hover {
-        background-color: #dde2e6;
-    }
-
-    .currency-button.active {
-      background-color: #4263eb;
-      color: #fff;
-    }
-
-    .shipping-options {
-        display: flex;
-        justify-content: space-between; 
-        margin-bottom: 10px;
-    }
-
-    .shipping-button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background-color: #e9ecef;
-      color: #495057;
-      width: 23%; 
-      text-align: center;
-      font-size: 14px;
-      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-      box-sizing: border-box;
-    }
-
-    .shipping-button:hover {
-        background-color: #dde2e6;
-    }
-
-    .shipping-button.active {
-      background-color: #4263eb;
-      color: #fff;
-    }
-
-     .profit-margin-options {
-        display: flex;
-        justify-content: space-between; 
-        margin-top: 10px;
-    }
-
-    .profit-button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background-color: #e9ecef;
-      color: #495057;
-      width: 23%; 
-      text-align: center;
-      font-size: 14px;
-      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-      box-sizing: border-box;
-    }
-
-     .profit-button:hover {
-        background-color: #dde2e6;
-    }
-
-    .profit-button.active {
-      background-color: #4263eb;
-      color: #fff;
-    }
-
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 8px;
-      background-color: #f8f9fa;
-      text-align: center;
-    }
-
-    .result p {
-      margin-bottom: 8px;
-      color: #495057;
-      font-size: 18px;
-    }
-
-    .result span {
-      font-weight: 600;
-      color: #4263eb;
-    }
-
-    .exchange-rate-info {
-        font-size: 12px;
-        color: #868e96;
-        text-align: right;
-        margin-bottom:5px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -192,14 +12,14 @@
     <div class="form-group">
       <label for="purchasePrice">购入价格:</label>
       <div class="currency-options">
-          <button class="currency-button active" id="cnyButton" onclick="setCurrency('CNY')">人民币 (元)</button>
-          <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">日元 (円)</button>
+        <button class="currency-button active" id="cnyButton" onclick="setCurrency('CNY')">人民币 (元)</button>
+        <button class="currency-button" id="jpyButton" onclick="setCurrency('JPY')">日元 (円)</button>
       </div>
       <div class="input-group">
-        <input type="number" id="purchasePrice" name="purchasePrice" required value="0" onfocus="this.value=''" oninput="displayExchangeRate();calculate()">
+        <input type="number" id="purchasePrice" name="purchasePrice" required value="0" onfocus="this.value=''" oninput="displayExchangeRate(); calculate()">
         <div class="input-unit" id="purchasePriceUnit">元</div>
       </div>
-       <div class="exchange-rate-info" id="exchangeRateInfo"></div>
+      <div class="exchange-rate-info" id="exchangeRateInfo"></div>
     </div>
     <div class="form-group">
       <label for="sellingPrice">出品价格:</label>
@@ -211,7 +31,7 @@
     <div class="form-group">
       <label>发货方式:</label>
       <div class="shipping-options">
-        <button class="shipping-button" id="miniButton" onclick="setShipping('mini')">mini(180円)</button>
+        <button class="shipping-button active" id="miniButton" onclick="setShipping('mini')">mini(180円)</button>
         <button class="shipping-button" id="postButton" onclick="setShipping('post')">ポスト(220円)</button>
         <button class="shipping-button" id="plusButton" onclick="setShipping('plus')">plus(520円)</button>
         <button class="shipping-button" id="expressButton" onclick="setShipping('express')">宅配便(730円)</button>
@@ -234,152 +54,6 @@
     </div>
   </div>
 
-  <script>
-    let currentCurrency = 'CNY';
-    let exchangeRate = 1;
-    let selectedShipping = '';
-    let convertedPurchasePrice = 0;
-
-    async function fetchExchangeRate() {
-      try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/CNY');
-        const data = await response.json();
-        exchangeRate = data.rates.JPY;
-        displayExchangeRate();
-      } catch (error) {
-        console.error('获取汇率失败:', error);
-        exchangeRate = 14.68;
-        displayExchangeRate();
-      }
-      calculate();
-    }
-
-    function displayExchangeRate() {
-      const purchasePrice = parseFloat(document.getElementById("purchasePrice").value) || 0;
-      convertedPurchasePrice = purchasePrice * exchangeRate;
-      document.getElementById("exchangeRateInfo").textContent = `实时汇率：1 CNY = ${exchangeRate.toFixed(2)} JPY， 换算后价格：${convertedPurchasePrice.toFixed(0)}円`;
-    }
-
-    function setCurrency(currency) {
-      currentCurrency = currency;
-      document.getElementById('cnyButton').classList.remove('active');
-      document.getElementById('jpyButton').classList.remove('active');
-
-      if (currency === 'CNY') {
-        document.getElementById('cnyButton').classList.add('active');
-        document.getElementById('purchasePriceUnit').textContent = '元';
-        fetchExchangeRate();
-      } else {
-        document.getElementById('jpyButton').classList.add('active');
-        document.getElementById('purchasePriceUnit').textContent = '円';
-        exchangeRate = 1;
-        displayExchangeRate();
-        calculate();
-      }
-    }
-
-    function setShipping(shippingMethod) {
-      selectedShipping = shippingMethod;
-
-      document.getElementById('miniButton').classList.remove('active');
-      document.getElementById('postButton').classList.remove('active');
-      document.getElementById('plusButton').classList.remove('active');
-      document.getElementById('expressButton').classList.remove('active');
-
-      document.getElementById(shippingMethod + 'Button').classList.add('active');
-      calculate();
-    }
-
-    function calculate() {
-      const purchasePriceInput = parseFloat(document.getElementById("purchasePrice").value);
-      const sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-      let shippingCost = 0;
-
-      if (isNaN(purchasePriceInput) || isNaN(sellingPrice)) {
-        document.getElementById("result").style.display = "none";
-        document.getElementById("exchangeRateInfo").textContent = "";
-        return;
-      }
-
-      let purchasePrice = purchasePriceInput;
-        if (currentCurrency === 'CNY') {
-            purchasePrice = purchasePriceInput * exchangeRate;
-            convertedPurchasePrice = purchasePrice;
-        } else {
-            convertedPurchasePrice = purchasePriceInput;
-        }
-       displayExchangeRate();
-
-      switch (selectedShipping) {
-        case "mini":
-          shippingCost = 180;
-          break;
-          case "post":
-              shippingCost = 220;
-              break;
-        case "plus":
-          shippingCost = 520;
-          break;
-        case "express":
-          shippingCost = 730;
-          break;
-        default:
-          document.getElementById("result").style.display = "none";
-          return;
-      }
-
-      const revenue = sellingPrice * 0.9 - shippingCost;
-      const profit = revenue - convertedPurchasePrice;
-      const profitMargin = (profit / sellingPrice) * 100;
-
-      document.getElementById("profitMargin").textContent = profitMargin.toFixed(0);
-
-      if (currentCurrency === 'CNY') {
-            const profitCNY = profit / exchangeRate;
-            document.getElementById("profitJPY").textContent = profit.toFixed(0);
-            document.getElementById("profitCNY").textContent = `≈ ${profitCNY.toFixed(0)}元`;
-       } else {
-           document.getElementById("profitJPY").textContent = profit.toFixed(0);
-           document.getElementById("profitCNY").textContent = ``;
-       }
-
-
-      document.getElementById("result").style.display = "block";
-    }
-
-    function calculateSellingPrice(targetProfitMargin) {
-      const purchasePriceInput = parseFloat(document.getElementById("purchasePrice").value);
-      let shippingCost = 0;
-
-        let purchasePrice = purchasePriceInput;
-        if (currentCurrency === 'CNY') {
-            purchasePrice = purchasePriceInput * exchangeRate;
-        }
-
-      switch (selectedShipping) {
-        case "mini":
-          shippingCost = 180;
-          break;
-          case "post":
-              shippingCost = 220;
-              break;
-        case "plus":
-          shippingCost = 520;
-          break;
-        case "express":
-          shippingCost = 730;
-          break;
-        default:
-          return;
-      }
-
-
-      const sellingPrice = (purchasePrice + shippingCost) / (0.9 - (targetProfitMargin/100));
-      document.getElementById("sellingPrice").value = sellingPrice.toFixed(0);
-      calculate();
-    }
-
-    fetchExchangeRate();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
