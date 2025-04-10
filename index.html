@@ -237,8 +237,13 @@
   <script>
     let currentCurrency = 'CNY';
     let exchangeRate = 1;
-    let selectedShipping = '';
+    let selectedShipping = 'mini'; 
     let convertedPurchasePrice = 0;
+
+    function initializeDefaults() {
+        setShipping('mini');
+        fetchExchangeRate();
+    }
 
     async function fetchExchangeRate() {
       try {
