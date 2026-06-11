@@ -1,22 +1,22 @@
 :root {
   color-scheme: light;
-  --bg: #f3f6f1;
-  --surface: #fffffc;
-  --surface-muted: #edf3f0;
-  --surface-strong: #e1ebe6;
-  --text: #071512;
-  --muted: #64726d;
-  --muted-strong: #3d4c47;
-  --border: rgba(7, 21, 18, 0.13);
-  --border-strong: rgba(7, 21, 18, 0.2);
-  --accent: #087a6a;
-  --accent-strong: #065d52;
-  --accent-soft: #dff3ee;
-  --display-bg: #061916;
-  --display-bg-2: #0d2a25;
-  --display-fg: #f8fffb;
-  --danger: #df5a3f;
-  --shadow: 0 18px 44px rgba(11, 31, 27, 0.1);
+  --bg: #fff7c7;
+  --surface: #fffef7;
+  --surface-muted: #fff2a8;
+  --surface-strong: #ffe067;
+  --text: #17140b;
+  --muted: #736848;
+  --muted-strong: #493e24;
+  --border: rgba(28, 22, 7, 0.14);
+  --border-strong: rgba(28, 22, 7, 0.24);
+  --accent: #ffd21f;
+  --accent-strong: #b36b00;
+  --accent-soft: #fff0a3;
+  --display-bg: #17140b;
+  --display-bg-2: #2c2411;
+  --display-fg: #fff8cf;
+  --danger: #e85f3a;
+  --shadow: 0 18px 44px rgba(28, 22, 7, 0.12);
   --radius: 8px;
 }
 
@@ -35,7 +35,7 @@ body {
   min-height: 100dvh;
   margin: 0;
   background:
-    linear-gradient(180deg, #eaf3ec 0%, #f7f8f3 52%, #eef3f0 100%),
+    linear-gradient(180deg, #fff2a8 0%, #fffdf0 52%, #fff7c7 100%),
     var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
@@ -48,8 +48,8 @@ body::before {
   z-index: -1;
   content: "";
   background-image:
-    linear-gradient(rgba(6, 25, 22, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(6, 25, 22, 0.055) 1px, transparent 1px);
+    linear-gradient(rgba(28, 22, 7, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 22, 7, 0.055) 1px, transparent 1px);
   background-size: 34px 34px;
   mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.54) 42%, transparent 100%);
 }
@@ -69,7 +69,7 @@ button:focus {
 
 button:focus-visible,
 input[type="number"]:focus-visible {
-  outline: 2px solid rgba(8, 122, 106, 0.34);
+  outline: 2px solid rgba(255, 210, 31, 0.8);
   outline-offset: 2px;
 }
 
@@ -103,14 +103,14 @@ input[type="number"]:focus-visible {
   width: 44px;
   height: 44px;
   flex: 0 0 auto;
-  border: 1px solid rgba(7, 21, 18, 0.12);
+  border: 1px solid rgba(28, 22, 7, 0.18);
   border-radius: var(--radius);
-  box-shadow: 0 10px 24px rgba(6, 25, 22, 0.14);
+  box-shadow: 0 10px 24px rgba(28, 22, 7, 0.16);
 }
 
 .eyebrow {
   margin: 0 0 3px;
-  color: var(--accent-strong);
+  color: #8a5600;
   font-size: 11px;
   font-weight: 850;
   letter-spacing: 0;
@@ -133,22 +133,22 @@ h1 {
   align-content: center;
   gap: 1px;
   flex: 0 0 auto;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(28, 22, 7, 0.22);
   border-radius: var(--radius);
-  background: rgba(255, 255, 252, 0.82);
-  color: var(--text);
-  box-shadow: 0 8px 22px rgba(11, 31, 27, 0.07);
+  background: var(--display-bg);
+  color: var(--display-fg);
+  box-shadow: 0 8px 22px rgba(28, 22, 7, 0.16);
 }
 
 .fee-badge span {
-  color: var(--muted);
+  color: rgba(255, 248, 207, 0.72);
   font-size: 11px;
   font-weight: 760;
   line-height: 1.1;
 }
 
 .fee-badge strong {
-  color: var(--display-bg);
+  color: var(--accent);
   font-size: 17px;
   line-height: 1.05;
 }
@@ -170,8 +170,8 @@ h1 {
   position: relative;
   overflow: hidden;
   padding: 12px;
-  background: rgba(255, 255, 252, 0.92);
-  box-shadow: 0 12px 30px rgba(11, 31, 27, 0.07);
+  background: rgba(255, 254, 247, 0.94);
+  box-shadow: 0 12px 30px rgba(28, 22, 7, 0.08);
 }
 
 .field-card::before {
@@ -237,8 +237,8 @@ label,
 
 .segment-button.active {
   background: var(--display-bg);
-  color: #ffffff;
-  box-shadow: 0 7px 16px rgba(6, 25, 22, 0.16);
+  color: var(--accent);
+  box-shadow: 0 7px 16px rgba(28, 22, 7, 0.18);
 }
 
 .input-row {
@@ -255,8 +255,8 @@ label,
 }
 
 .input-row:focus-within {
-  border-color: rgba(8, 122, 106, 0.72);
-  box-shadow: 0 0 0 4px rgba(8, 122, 106, 0.1);
+  border-color: rgba(255, 210, 31, 0.95);
+  box-shadow: 0 0 0 4px rgba(255, 210, 31, 0.22);
 }
 
 input[type="number"] {
@@ -343,12 +343,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .shipping-button.active {
   border-color: var(--display-bg);
   background: var(--display-bg);
-  color: #ffffff;
-  box-shadow: 0 9px 20px rgba(6, 25, 22, 0.18);
+  color: var(--display-fg);
+  box-shadow: 0 9px 20px rgba(28, 22, 7, 0.2);
 }
 
 .shipping-button.active strong {
-  color: #ffffff;
+  color: var(--accent);
 }
 
 .profit-options {
@@ -369,8 +369,8 @@ input[type="number"]::-webkit-inner-spin-button {
 .profit-button.active {
   border-color: var(--display-bg);
   background: var(--display-bg);
-  color: #ffffff;
-  box-shadow: 0 9px 20px rgba(6, 25, 22, 0.16);
+  color: var(--accent);
+  box-shadow: 0 9px 20px rgba(28, 22, 7, 0.18);
 }
 
 .segment-button:active,
@@ -385,10 +385,11 @@ input[type="number"]::-webkit-inner-spin-button {
   overflow: hidden;
   margin-bottom: 3px;
   padding: 16px;
-  border-color: rgba(6, 25, 22, 0.12);
+  border-color: rgba(28, 22, 7, 0.14);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 13px),
+    radial-gradient(circle at 86% 14%, rgba(255, 210, 31, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 48%),
+    repeating-linear-gradient(90deg, rgba(255, 210, 31, 0.055) 0 1px, transparent 1px 13px),
     linear-gradient(135deg, var(--display-bg), var(--display-bg-2));
   color: var(--display-fg);
   box-shadow: var(--shadow);
@@ -401,7 +402,7 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 46px;
   height: 15px;
   content: "";
-  background: repeating-linear-gradient(90deg, rgba(248, 255, 251, 0.54) 0 2px, transparent 2px 6px);
+  background: repeating-linear-gradient(90deg, rgba(255, 210, 31, 0.8) 0 2px, transparent 2px 6px);
   opacity: 0.5;
 }
 
@@ -410,18 +411,18 @@ input[type="number"]::-webkit-inner-spin-button {
   grid-template-columns: 1fr;
   gap: 7px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(248, 255, 251, 0.14);
+  border-bottom: 1px solid rgba(255, 248, 207, 0.16);
 }
 
 .result-primary > span {
-  color: rgba(248, 255, 251, 0.7);
+  color: rgba(255, 248, 207, 0.72);
   font-size: 13px;
   font-weight: 800;
 }
 
 .result-primary strong {
   max-width: 100%;
-  color: #ffffff;
+  color: var(--accent);
   font-size: 48px;
   line-height: 1;
   letter-spacing: 0;
@@ -430,7 +431,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .result-primary em {
   min-height: 18px;
-  color: rgba(248, 255, 251, 0.72);
+  color: rgba(255, 248, 207, 0.72);
   font-size: 13px;
   font-style: normal;
   font-weight: 760;
@@ -446,7 +447,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .result-grid div {
   min-width: 0;
   padding: 4px 10px 2px;
-  border-right: 1px solid rgba(248, 255, 251, 0.13);
+  border-right: 1px solid rgba(255, 248, 207, 0.14);
 }
 
 .result-grid div:first-child {
@@ -461,14 +462,14 @@ input[type="number"]::-webkit-inner-spin-button {
 .result-grid > div > span {
   display: block;
   margin-bottom: 6px;
-  color: rgba(248, 255, 251, 0.62);
+  color: rgba(255, 248, 207, 0.62);
   font-size: 12px;
   font-weight: 720;
 }
 
 .result-grid > div > strong {
   display: block;
-  color: #ffffff;
+  color: #fff8cf;
   font-size: 16px;
   letter-spacing: 0;
   overflow-wrap: anywhere;
