@@ -131,8 +131,11 @@ function bindEvents() {
     button.addEventListener("click", () => {
       blurActiveInput();
       const targetMargin = Number(button.dataset.targetMargin);
-      calculateSellingPrice(targetMargin);
-      setActiveProfitButton(button);
+      if (calculateSellingPrice(targetMargin)) {
+        setActiveProfitButton(button);
+      } else {
+        clearActiveProfitButton();
+      }
     });
   });
 
@@ -204,6 +207,7 @@ function render() {
     : "";
   elements.profitMargin.textContent = formatPercent(profitMargin);
   elements.feeJPY.textContent = formatYen(fee);
+  elements.result.classList.add("is-ready");
   elements.result.classList.toggle("is-negative", profit < 0);
 }
 
@@ -242,13 +246,14 @@ function renderEmptyResult(shippingCost) {
   elements.profitMargin.textContent = "--";
   elements.feeJPY.textContent = "--";
   elements.shippingJPY.textContent = formatYen(shippingCost);
+  elements.result.classList.remove("is-ready");
   elements.result.classList.remove("is-negative");
 }
 
 function calculateSellingPrice(targetProfitMargin) {
   const purchaseInput = parseAmount(state.purchasePrice);
   if (purchaseInput === null) {
-    return;
+    return false;
   }
 
   const purchaseJPY = state.currency === "CNY"
@@ -258,23 +263,29 @@ function calculateSellingPrice(targetProfitMargin) {
   const denominator = 0.9 - (targetProfitMargin / 100);
 
   if (denominator <= 0) {
-    return;
+    return false;
   }
 
   const sellingPrice = Math.ceil((purchaseJPY + shipping.cost) / denominator);
   state.sellingPrice = String(sellingPrice);
   elements.sellingPrice.value = state.sellingPrice;
   saveAndRender();
+  return true;
 }
 
 function setActiveProfitButton(activeButton) {
   elements.profitButtons.forEach((button) => {
-    button.classList.toggle("active", button === activeButton);
+    const active = button === activeButton;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
 }
 
 function clearActiveProfitButton() {
-  elements.profitButtons.forEach((button) => button.classList.remove("active"));
+  elements.profitButtons.forEach((button) => {
+    button.classList.remove("active");
+    button.setAttribute("aria-pressed", "false");
+  });
 }
 
 function blurActiveInput() {
