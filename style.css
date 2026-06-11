@@ -1,16 +1,16 @@
 :root {
   color-scheme: light;
-  --bg: #f4f7f5;
+  --bg: #f6f7f8;
   --surface: #ffffff;
-  --surface-muted: #eef4f1;
-  --text: #17211d;
-  --muted: #66736f;
-  --border: #d7e2de;
-  --accent: #0f766e;
-  --accent-strong: #0b5f59;
-  --accent-soft: #dff3ef;
-  --danger: #c2410c;
-  --shadow: 0 18px 50px rgba(28, 48, 43, 0.12);
+  --surface-muted: #f1f4f4;
+  --text: #111816;
+  --muted: #6d7774;
+  --border: #dce3e1;
+  --accent: #007a72;
+  --accent-strong: #005d58;
+  --accent-soft: #e5f4f2;
+  --accent-warm: #e35d2f;
+  --danger: #c7371d;
 }
 
 * {
@@ -27,9 +27,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
-  background:
-    linear-gradient(180deg, rgba(15, 118, 110, 0.12), rgba(244, 247, 245, 0) 220px),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -43,30 +41,40 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+button:focus {
+  outline: none;
+}
+
+button:focus-visible,
+input[type="number"]:focus-visible {
+  outline: 2px solid rgba(0, 122, 114, 0.32);
+  outline-offset: 2px;
+}
+
 .app-shell {
   width: min(100%, 560px);
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: calc(18px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+  padding: calc(14px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 4px 4px 0;
+  gap: 12px;
+  padding: 2px 2px 6px;
 }
 
 .eyebrow {
-  margin: 0 0 4px;
+  margin: 0 0 2px;
   color: var(--accent-strong);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -74,28 +82,32 @@ button {
 h1 {
   margin: 0;
   color: var(--text);
-  font-size: 28px;
-  line-height: 1.1;
+  font-size: 26px;
+  line-height: 1.08;
   letter-spacing: 0;
 }
 
 .fee-badge {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
+  min-width: 72px;
+  min-height: 34px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
-  border: 1px solid rgba(15, 118, 110, 0.24);
-  border-radius: 50%;
-  background: var(--accent-soft);
+  border: 1px solid rgba(0, 122, 114, 0.18);
+  border-radius: 8px;
+  background: #ffffff;
   color: var(--accent-strong);
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 850;
 }
 
 .calculator {
+  order: 2;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .field-card,
@@ -103,11 +115,10 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface);
-  box-shadow: var(--shadow);
 }
 
 .field-card {
-  padding: 14px;
+  padding: 12px;
 }
 
 .field-heading {
@@ -115,24 +126,24 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 label,
 .field-label {
   display: block;
   color: var(--text);
-  font-size: 15px;
-  font-weight: 750;
+  font-size: 14px;
+  font-weight: 780;
 }
 
 .segmented-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  width: 112px;
-  min-height: 36px;
-  padding: 3px;
+  gap: 3px;
+  width: 96px;
+  min-height: 32px;
+  padding: 2px;
   border-radius: 8px;
   background: var(--surface-muted);
   border: 1px solid var(--border);
@@ -153,10 +164,10 @@ label,
 
 .segment-button {
   min-width: 0;
-  min-height: 28px;
+  min-height: 26px;
   background: transparent;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
 }
 
@@ -167,23 +178,23 @@ label,
 
 .input-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 54px;
+  grid-template-columns: minmax(0, 1fr) 48px;
   align-items: stretch;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--surface);
+  background: #fbfcfc;
   overflow: hidden;
 }
 
 input[type="number"] {
   width: 100%;
-  min-height: 52px;
-  padding: 0 14px;
+  min-height: 50px;
+  padding: 0 13px;
   border: 0;
-  background: #ffffff;
+  background: #fbfcfc;
   color: var(--text);
-  font-size: 24px;
-  font-weight: 750;
+  font-size: 25px;
+  font-weight: 820;
   letter-spacing: 0;
   outline: none;
 }
@@ -208,12 +219,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border-left: 1px solid var(--border);
   background: var(--surface-muted);
   color: var(--muted);
+  font-size: 15px;
   font-weight: 800;
 }
 
 .helper-text {
-  min-height: 17px;
-  margin: 8px 0 0;
+  min-height: 16px;
+  margin: 7px 0 0;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.35;
@@ -227,34 +239,34 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .shipping-options {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
 }
 
 .shipping-button {
-  min-height: 58px;
-  padding: 9px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  min-height: 54px;
+  padding: 8px 8px;
+  display: grid;
+  align-content: center;
+  gap: 2px;
   border: 1px solid var(--border);
-  background: #ffffff;
+  background: #fbfcfc;
   color: var(--text);
-  text-align: left;
+  text-align: center;
 }
 
 .shipping-button span {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: 14px;
-  font-weight: 750;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 780;
 }
 
 .shipping-button strong {
-  flex: 0 0 auto;
   color: var(--accent-strong);
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 .shipping-button.active {
@@ -265,16 +277,16 @@ input[type="number"]::-webkit-inner-spin-button {
 .profit-options {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
+  gap: 7px;
+  margin-top: 8px;
 }
 
 .profit-button {
-  min-height: 46px;
+  min-height: 42px;
   border: 1px solid var(--border);
-  background: #ffffff;
+  background: #fbfcfc;
   color: var(--text);
-  font-weight: 800;
+  font-weight: 820;
 }
 
 .profit-button.active {
@@ -290,46 +302,40 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .result-card {
-  position: sticky;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  margin-top: auto;
-  padding: 16px;
+  order: 1;
+  margin-bottom: 2px;
+  padding: 14px;
+  border-color: rgba(0, 122, 114, 0.2);
+  background:
+    linear-gradient(135deg, rgba(0, 122, 114, 0.08), rgba(227, 93, 47, 0.08)),
+    #ffffff;
 }
 
 .result-primary {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas:
-    "label value"
-    "label cny";
-  align-items: baseline;
-  gap: 0 12px;
-  padding-bottom: 14px;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
 }
 
 .result-primary > span {
-  grid-area: label;
   color: var(--muted);
-  font-size: 14px;
-  font-weight: 750;
+  font-size: 13px;
+  font-weight: 780;
 }
 
 .result-primary strong {
-  grid-area: value;
-  justify-self: end;
   color: var(--accent-strong);
-  font-size: 34px;
+  font-size: 42px;
   line-height: 1;
   letter-spacing: 0;
 }
 
 .result-primary em {
-  grid-area: cny;
-  justify-self: end;
   min-height: 17px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 700;
 }
@@ -337,7 +343,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .result-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
   padding-top: 12px;
 }
 
@@ -347,7 +353,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .result-grid > div > span {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
@@ -356,13 +362,13 @@ input[type="number"]::-webkit-inner-spin-button {
 .result-grid > div > strong {
   display: block;
   color: var(--text);
-  font-size: 17px;
+  font-size: 16px;
   letter-spacing: 0;
   white-space: nowrap;
 }
 
 .result-card.is-negative .result-primary strong {
-  color: var(--danger);
+  color: var(--accent-warm);
 }
 
 @media (min-width: 480px) {
@@ -370,15 +376,11 @@ input[type="number"]::-webkit-inner-spin-button {
     padding-right: 20px;
     padding-left: 20px;
   }
-
-  .shipping-options {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 360px) {
   h1 {
-    font-size: 25px;
+    font-size: 24px;
   }
 
   input[type="number"] {
@@ -386,13 +388,10 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 
   .shipping-button {
-    min-height: 62px;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
+    min-height: 56px;
   }
 
   .result-primary strong {
-    font-size: 30px;
+    font-size: 37px;
   }
 }
