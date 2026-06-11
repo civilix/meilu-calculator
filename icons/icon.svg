@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="bg" x1="80" y1="48" x2="432" y2="464" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#ffd21f"/>
-      <stop offset="1" stop-color="#ffae00"/>
+      <stop stop-color="#fcf5a7"/>
+      <stop offset="1" stop-color="#ffd98c"/>
     </linearGradient>
     <linearGradient id="shine" x1="128" y1="100" x2="384" y2="344" gradientUnits="userSpaceOnUse">
       <stop stop-color="#ffffff" stop-opacity=".34"/>
@@ -12,10 +12,10 @@
   </defs>
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
   <rect x="70" y="72" width="372" height="368" rx="76" fill="url(#shine)"/>
-  <path d="M132 174c0-34 28-62 62-62h124c34 0 62 28 62 62v24H132v-24z" fill="#fff8cf"/>
-  <path d="M132 198h248v116c0 34-28 62-62 62H194c-34 0-62-28-62-62V198z" fill="#17140b"/>
-  <text x="256" y="330" text-anchor="middle" fill="#ffd21f" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="154" font-weight="900">¥</text>
-  <circle cx="360" cy="144" r="52" fill="#17140b"/>
-  <text x="360" y="164" text-anchor="middle" fill="#ffd21f" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="54" font-weight="900">%</text>
-  <path d="M158 416h196" stroke="#17140b" stroke-width="26" stroke-linecap="round" opacity=".88"/>
+  <path d="M132 174c0-34 28-62 62-62h124c34 0 62 28 62 62v24H132v-24z" fill="#ffffff"/>
+  <path d="M132 198h248v116c0 34-28 62-62 62H194c-34 0-62-28-62-62V198z" fill="#555658"/>
+  <text x="256" y="330" text-anchor="middle" fill="#ffd98c" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="154" font-weight="900">¥</text>
+  <circle cx="360" cy="144" r="52" fill="#2b90a2"/>
+  <text x="360" y="164" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="54" font-weight="900">%</text>
+  <path d="M158 416h196" stroke="#555658" stroke-width="26" stroke-linecap="round" opacity=".88"/>
 </svg>
