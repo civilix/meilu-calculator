@@ -15,17 +15,17 @@ const SHIPPING_OPTIONS = {
     cost: 520,
     detail: "送料455円 + 専用箱65円",
   },
-  compact: {
-    cost: 520,
-    detail: "送料450円 + 専用BOX70円",
-  },
   delivery60: {
     cost: 750,
-    detail: "宅急便/ゆうパック 60サイズ",
+    detail: "ゆうパック 60サイズ",
   },
-  eco: {
-    cost: 730,
-    detail: "エコメルカリ便 60-160サイズ",
+  delivery80: {
+    cost: 870,
+    detail: "ゆうパック 80サイズ",
+  },
+  delivery120: {
+    cost: 1200,
+    detail: "ゆうパック 120サイズ",
   },
 };
 
