@@ -1,150 +1,330 @@
-let currentCurrency = 'CNY';
-let exchangeRate = 1;
-let selectedShipping = 'mini'; // Default to mini
-let convertedPurchasePrice = 0;
+const STATE_KEY = "meilu-calculator-state";
+const RATE_ENDPOINT = "https://api.exchangerate-api.com/v4/latest/CNY";
+const FALLBACK_EXCHANGE_RATE = 23.65;
 
-// Initialize the shipping button selection
-document.addEventListener('DOMContentLoaded', function() {
-    setShipping('mini');
+const SHIPPING_OPTIONS = {
+  mini: {
+    cost: 180,
+    detail: "送料160円 + 専用封筒20円",
+  },
+  post: {
+    cost: 220,
+    detail: "送料215円 + シール約5円",
+  },
+  plus: {
+    cost: 520,
+    detail: "送料455円 + 専用箱65円",
+  },
+  compact: {
+    cost: 520,
+    detail: "送料450円 + 専用BOX70円",
+  },
+  delivery60: {
+    cost: 750,
+    detail: "宅急便/ゆうパック 60サイズ",
+  },
+  eco: {
+    cost: 730,
+    detail: "エコメルカリ便 60-160サイズ",
+  },
+};
+
+const DEFAULT_STATE = {
+  currency: "CNY",
+  shipping: "mini",
+  purchasePrice: "",
+  sellingPrice: "300",
+  exchangeRate: FALLBACK_EXCHANGE_RATE,
+  exchangeRateDate: "",
+};
+
+const state = loadState();
+
+const elements = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+  bindElements();
+  hydrateForm();
+  bindEvents();
+  render();
+  fetchExchangeRate();
+  registerServiceWorker();
 });
 
-async function fetchExchangeRate() {
+function bindElements() {
+  elements.purchasePrice = document.getElementById("purchasePrice");
+  elements.sellingPrice = document.getElementById("sellingPrice");
+  elements.purchasePriceUnit = document.getElementById("purchasePriceUnit");
+  elements.exchangeRateInfo = document.getElementById("exchangeRateInfo");
+  elements.shippingDetail = document.getElementById("shippingDetail");
+  elements.profitJPY = document.getElementById("profitJPY");
+  elements.profitCNY = document.getElementById("profitCNY");
+  elements.profitMargin = document.getElementById("profitMargin");
+  elements.feeJPY = document.getElementById("feeJPY");
+  elements.shippingJPY = document.getElementById("shippingJPY");
+  elements.result = document.getElementById("result");
+  elements.currencyButtons = document.querySelectorAll("[data-currency]");
+  elements.shippingButtons = document.querySelectorAll("[data-shipping]");
+  elements.profitButtons = document.querySelectorAll("[data-target-margin]");
+}
+
+function loadState() {
   try {
-    const response = await fetch('https://api.exchangerate-api.com/v4/latest/CNY');
-    const data = await response.json();
-    exchangeRate = data.rates.JPY;
-    displayExchangeRate();
+    const saved = JSON.parse(localStorage.getItem(STATE_KEY) || "{}");
+    return {
+      ...DEFAULT_STATE,
+      ...saved,
+      exchangeRate: toPositiveNumber(saved.exchangeRate) || DEFAULT_STATE.exchangeRate,
+      shipping: SHIPPING_OPTIONS[saved.shipping] ? saved.shipping : DEFAULT_STATE.shipping,
+      currency: saved.currency === "JPY" ? "JPY" : "CNY",
+    };
   } catch (error) {
-    console.error('获取汇率失败:', error);
-    exchangeRate = 14.68;
-    displayExchangeRate();
-  }
-  calculate();
-}
-
-function displayExchangeRate() {
-  const purchasePrice = parseFloat(document.getElementById("purchasePrice").value) || 0;
-  convertedPurchasePrice = purchasePrice * exchangeRate;
-  document.getElementById("exchangeRateInfo").textContent = `实时汇率：1 CNY = ${exchangeRate.toFixed(2)} JPY， 换算后价格：${convertedPurchasePrice.toFixed(0)}円`;
-}
-
-function setCurrency(currency) {
-  currentCurrency = currency;
-  document.getElementById('cnyButton').classList.remove('active');
-  document.getElementById('jpyButton').classList.remove('active');
-
-  if (currency === 'CNY') {
-    document.getElementById('cnyButton').classList.add('active');
-    document.getElementById('purchasePriceUnit').textContent = '元';
-    fetchExchangeRate();
-  } else {
-    document.getElementById('jpyButton').classList.add('active');
-    document.getElementById('purchasePriceUnit').textContent = '円';
-    exchangeRate = 1;
-    displayExchangeRate();
-    calculate();
+    return { ...DEFAULT_STATE };
   }
 }
 
-function setShipping(shippingMethod) {
-  selectedShipping = shippingMethod;
-
-  document.getElementById('miniButton').classList.remove('active');
-  document.getElementById('postButton').classList.remove('active');
-  document.getElementById('plusButton').classList.remove('active');
-  document.getElementById('expressButton').classList.remove('active');
-
-  document.getElementById(shippingMethod + 'Button').classList.add('active');
-  calculate();
+function saveState() {
+  try {
+    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+  } catch (error) {
+    // Calculation should continue even if storage is unavailable.
+  }
 }
 
-function calculate() {
-  const purchasePriceInput = parseFloat(document.getElementById("purchasePrice").value);
-  const sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
-  let shippingCost = 0;
+function hydrateForm() {
+  elements.purchasePrice.value = state.purchasePrice;
+  elements.sellingPrice.value = state.sellingPrice;
+}
 
-  if (isNaN(purchasePriceInput) || isNaN(sellingPrice)) {
-    document.getElementById("result").style.display = "none";
-    document.getElementById("exchangeRateInfo").textContent = "";
+function bindEvents() {
+  elements.purchasePrice.addEventListener("input", () => {
+    state.purchasePrice = elements.purchasePrice.value;
+    saveAndRender();
+  });
+
+  elements.sellingPrice.addEventListener("input", () => {
+    state.sellingPrice = elements.sellingPrice.value;
+    clearActiveProfitButton();
+    saveAndRender();
+  });
+
+  elements.currencyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      blurActiveInput();
+      state.currency = button.dataset.currency;
+      saveAndRender();
+      if (state.currency === "CNY") {
+        fetchExchangeRate();
+      }
+    });
+  });
+
+  elements.shippingButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      blurActiveInput();
+      state.shipping = button.dataset.shipping;
+      saveAndRender();
+    });
+  });
+
+  elements.profitButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      blurActiveInput();
+      const targetMargin = Number(button.dataset.targetMargin);
+      calculateSellingPrice(targetMargin);
+      setActiveProfitButton(button);
+    });
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element) || !target.closest("input")) {
+      blurActiveInput();
+    }
+  });
+}
+
+async function fetchExchangeRate() {
+  if (state.currency !== "CNY") {
+    render();
     return;
   }
 
-  let purchasePrice = purchasePriceInput;
-    if (currentCurrency === 'CNY') {
-        purchasePrice = purchasePriceInput * exchangeRate;
-        convertedPurchasePrice = purchasePrice;
-    } else {
-        convertedPurchasePrice = purchasePriceInput;
+  try {
+    const response = await fetch(RATE_ENDPOINT, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Exchange rate request failed: ${response.status}`);
     }
-   displayExchangeRate();
+    const data = await response.json();
+    const fetchedRate = toPositiveNumber(data.rates && data.rates.JPY);
+    if (!fetchedRate) {
+      throw new Error("Exchange rate response did not include JPY");
+    }
+    state.exchangeRate = fetchedRate;
+    state.exchangeRateDate = data.date || "";
+    saveAndRender();
+  } catch (error) {
+    render();
+  }
+}
 
-  switch (selectedShipping) {
-    case "mini":
-      shippingCost = 180;
-      break;
-      case "post":
-          shippingCost = 220;
-          break;
-    case "plus":
-      shippingCost = 520;
-      break;
-    case "express":
-      shippingCost = 730;
-      break;
-    default:
-      document.getElementById("result").style.display = "none";
-      return;
+function saveAndRender() {
+  saveState();
+  render();
+}
+
+function render() {
+  const shipping = SHIPPING_OPTIONS[state.shipping] || SHIPPING_OPTIONS.mini;
+  const purchaseInput = parseAmount(state.purchasePrice);
+  const sellingPrice = parseAmount(state.sellingPrice);
+  const purchaseJPY = state.currency === "CNY" && purchaseInput !== null
+    ? purchaseInput * state.exchangeRate
+    : purchaseInput;
+
+  renderButtons();
+  elements.purchasePriceUnit.textContent = state.currency === "CNY" ? "元" : "円";
+  elements.shippingDetail.textContent = shipping.detail;
+  elements.shippingJPY.textContent = formatYen(shipping.cost);
+
+  renderExchangeInfo(purchaseInput, purchaseJPY);
+
+  if (purchaseJPY === null || sellingPrice === null || sellingPrice <= 0) {
+    renderEmptyResult(shipping.cost);
+    return;
   }
 
-  const revenue = sellingPrice * 0.9 - shippingCost;
-  const profit = revenue - convertedPurchasePrice;
+  const fee = sellingPrice * 0.1;
+  const revenueAfterFeeAndShipping = sellingPrice - fee - shipping.cost;
+  const profit = revenueAfterFeeAndShipping - purchaseJPY;
   const profitMargin = (profit / sellingPrice) * 100;
 
-  document.getElementById("profitMargin").textContent = profitMargin.toFixed(0);
+  elements.profitJPY.textContent = formatYen(profit);
+  elements.profitCNY.textContent = state.currency === "CNY"
+    ? `≈ ${formatCny(profit / state.exchangeRate)}元`
+    : "";
+  elements.profitMargin.textContent = formatPercent(profitMargin);
+  elements.feeJPY.textContent = formatYen(fee);
+  elements.result.classList.toggle("is-negative", profit < 0);
+}
 
-  if (currentCurrency === 'CNY') {
-        const profitCNY = profit / exchangeRate;
-        document.getElementById("profitJPY").textContent = profit.toFixed(0);
-        document.getElementById("profitCNY").textContent = `≈ ${profitCNY.toFixed(0)}元`;
-   } else {
-       document.getElementById("profitJPY").textContent = profit.toFixed(0);
-       document.getElementById("profitCNY").textContent = ``;
-   }
+function renderButtons() {
+  elements.currencyButtons.forEach((button) => {
+    const active = button.dataset.currency === state.currency;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
 
+  elements.shippingButtons.forEach((button) => {
+    const active = button.dataset.shipping === state.shipping;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
 
-  document.getElementById("result").style.display = "block";
+function renderExchangeInfo(purchaseInput, purchaseJPY) {
+  if (state.currency === "JPY") {
+    elements.exchangeRateInfo.textContent = "成本按日元计算";
+    return;
+  }
+
+  const rateDate = state.exchangeRateDate ? ` (${state.exchangeRateDate})` : "";
+  if (purchaseInput === null || purchaseJPY === null) {
+    elements.exchangeRateInfo.textContent = `1元 = ${state.exchangeRate.toFixed(2)}円${rateDate}`;
+    return;
+  }
+
+  elements.exchangeRateInfo.textContent = `1元 = ${state.exchangeRate.toFixed(2)}円${rateDate}，成本约 ${formatYen(purchaseJPY)}円`;
+}
+
+function renderEmptyResult(shippingCost) {
+  elements.profitJPY.textContent = "--";
+  elements.profitCNY.textContent = "";
+  elements.profitMargin.textContent = "--";
+  elements.feeJPY.textContent = "--";
+  elements.shippingJPY.textContent = formatYen(shippingCost);
+  elements.result.classList.remove("is-negative");
 }
 
 function calculateSellingPrice(targetProfitMargin) {
-  const purchasePriceInput = parseFloat(document.getElementById("purchasePrice").value);
-  let shippingCost = 0;
-
-    let purchasePrice = purchasePriceInput;
-    if (currentCurrency === 'CNY') {
-        purchasePrice = purchasePriceInput * exchangeRate;
-    }
-
-  switch (selectedShipping) {
-    case "mini":
-      shippingCost = 180;
-      break;
-      case "post":
-          shippingCost = 220;
-          break;
-    case "plus":
-      shippingCost = 520;
-      break;
-    case "express":
-      shippingCost = 730;
-      break;
-    default:
-      return;
+  const purchaseInput = parseAmount(state.purchasePrice);
+  if (purchaseInput === null) {
+    return;
   }
 
+  const purchaseJPY = state.currency === "CNY"
+    ? purchaseInput * state.exchangeRate
+    : purchaseInput;
+  const shipping = SHIPPING_OPTIONS[state.shipping] || SHIPPING_OPTIONS.mini;
+  const denominator = 0.9 - (targetProfitMargin / 100);
 
-  const sellingPrice = (purchasePrice + shippingCost) / (0.9 - (targetProfitMargin/100));
-  document.getElementById("sellingPrice").value = sellingPrice.toFixed(0);
-  calculate();
+  if (denominator <= 0) {
+    return;
+  }
+
+  const sellingPrice = Math.ceil((purchaseJPY + shipping.cost) / denominator);
+  state.sellingPrice = String(sellingPrice);
+  elements.sellingPrice.value = state.sellingPrice;
+  saveAndRender();
 }
 
-fetchExchangeRate();
+function setActiveProfitButton(activeButton) {
+  elements.profitButtons.forEach((button) => {
+    button.classList.toggle("active", button === activeButton);
+  });
+}
+
+function clearActiveProfitButton() {
+  elements.profitButtons.forEach((button) => button.classList.remove("active"));
+}
+
+function blurActiveInput() {
+  const activeElement = document.activeElement;
+  if (activeElement && activeElement.matches("input")) {
+    activeElement.blur();
+  }
+}
+
+function parseAmount(value) {
+  if (value === "" || value === null || value === undefined) {
+    return null;
+  }
+
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function toPositiveNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function formatYen(value) {
+  if (!Number.isFinite(value)) {
+    return "--";
+  }
+  return String(Math.round(value));
+}
+
+function formatCny(value) {
+  if (!Number.isFinite(value)) {
+    return "--";
+  }
+  return String(Math.round(value));
+}
+
+function formatPercent(value) {
+  if (!Number.isFinite(value)) {
+    return "--";
+  }
+  return value.toFixed(1);
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
