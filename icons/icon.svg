@@ -1,7 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0f766e"/>
-  <rect x="86" y="104" width="340" height="304" rx="46" fill="#ffffff"/>
-  <path d="M164 188h184v34H164zM164 254h94v34h-94zM286 254h62v34h-62zM164 320h184v34H164z" fill="#0f766e"/>
-  <circle cx="354" cy="146" r="40" fill="#f4b740"/>
-  <path d="M342 126h24v12h-12v17h12v12h-12v17h-12v-17h-12v-12h12v-17h-12v-12h12z" fill="#17211d"/>
+  <defs>
+    <linearGradient id="bg" x1="80" y1="48" x2="432" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b302b"/>
+      <stop offset="1" stop-color="#163f36"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="128" y1="100" x2="384" y2="344" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity=".18"/>
+      <stop offset=".58" stop-color="#ffffff" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="74" y="76" width="364" height="360" rx="72" fill="url(#shine)"/>
+  <path d="M132 174c0-34 28-62 62-62h124c34 0 62 28 62 62v24H132v-24z" fill="#f6fffc"/>
+  <path d="M132 198h248v116c0 34-28 62-62 62H194c-34 0-62-28-62-62V198z" fill="#e8f4f1"/>
+  <text x="256" y="330" text-anchor="middle" fill="#0b302b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="154" font-weight="900">¥</text>
+  <circle cx="360" cy="144" r="52" fill="#f47a3d"/>
+  <text x="360" y="164" text-anchor="middle" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="54" font-weight="900">%</text>
+  <path d="M158 416h196" stroke="#f6fffc" stroke-width="26" stroke-linecap="round" opacity=".88"/>
 </svg>

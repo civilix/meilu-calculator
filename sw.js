@@ -1,4 +1,4 @@
-const CACHE_NAME = "meilu-calculator-2026-06-12-6";
+const CACHE_NAME = "meilu-calculator-2026-06-12-7";
 
 const APP_SHELL = [
   "./",
